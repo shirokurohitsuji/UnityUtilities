@@ -2,7 +2,7 @@
   "name": "studio.shirokurohitsuji.unity-utilities",
   "displayName": "UnityUtilities",
   "description": "This is a package of utility files that are useful to include when starting a project.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": {
     "name": "Shirokurohitsuji",
     "url": "https://shirokurohitsuji.studio/"
@@ -14,8 +14,8 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/shirokurohitsuji/UnityUtilities#readme",
-  "changelogUrl": "https://github.com/shirokurohitsuji/UnityUtilities/blob/master/LICENSE",
-  "licensesUrl": "https://github.com/shirokurohitsuji/UnityUtilities/blob/master/CHANGELOG",
+  "changelogUrl": "https://github.com/shirokurohitsuji/UnityUtilities/blob/master/LICENSE.md",
+  "licensesUrl": "https://github.com/shirokurohitsuji/UnityUtilities/blob/master/CHANGELOG.md",
   "dependencies": {
   },
   "repository": {
