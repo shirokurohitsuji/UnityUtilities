@@ -1,8 +1,10 @@
 {
-    "name": "Unity.UnityUtilities",
+    "name": "UnityUtilities.Editor",
     "rootNamespace": "",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
