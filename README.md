@@ -4,7 +4,7 @@ This is a package of utility files that are useful to include when starting a pr
 
 ## Requirement
 
-* Unity Editor 2021.2.0f1 
+* Unity Editor 2021.2.3f1 
 
 It should work with other versions, but we haven't tested it.
 
@@ -41,6 +41,8 @@ Color color = new ColorHtml("#FFFFFF");
 ```
 
 * **DictionaryExtension**: `GetValueIfExists` allows you to get a value if exists.
+
+* **EnumerableExtension**: Extracts one or a specified number of random values from an enumerable.
 
 * **EnumExtension**: You can get the random value, the number of items of specified enum, and all the value.  Also, you can parse string to enum more easily.
 
