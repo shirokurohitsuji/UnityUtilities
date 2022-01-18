@@ -1,7 +1,9 @@
 {
     "name": "UnityUtilities",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "UniRx"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
