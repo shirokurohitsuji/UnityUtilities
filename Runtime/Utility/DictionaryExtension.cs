@@ -6,15 +6,14 @@ namespace Utility
     {
         public static TV GetValueIfExists<TK, TV>(this IDictionary<TK, TV> map, TK key, TV defaultValue)
         {
+            if (key == null) return defaultValue;
             return map.ContainsKey(key)
                 ? map[key]
                 : defaultValue;
         }
         public static TV GetValueIfExists<TK, TV>(this IDictionary<TK, TV> map, TK key)
         {
-            return map.ContainsKey(key)
-                ? map[key]
-                : default;
+            return map.GetValueIfExists(key, default);
         }
     }
 }
