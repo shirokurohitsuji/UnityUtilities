@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.5] - 2022-04-10
+### Added
+- Added Shuffle() for IList<T>.
+
 ## [1.0.4] - 2022-01-18
 ### Added
 - Created LinqExtension and ObservableExtension to check the stream using Debug.Log().  To use them, you need to import NewtonSoft.Json package and (only for ObservableExtension,) UniRx.
@@ -27,7 +31,8 @@
 ### Added
 - Start distribution from Unity Package Manager.
 
-[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.1...v1.0.2
