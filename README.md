@@ -4,7 +4,7 @@ This is a package of utility files that are useful to include when starting a pr
 
 ## Requirement
 
-* Unity Editor 2021.2.7f1 
+* Unity Editor 2021.2.18f1 
 
 It should work with other versions, but we haven't tested it.
 
@@ -52,7 +52,7 @@ Color color = new ColorHtml("#FFFFFF");
 
 * **LinqExtension**: Show debug log or do something for LINQ.
 
-* **ListExtension**: Get the value even if the index is more than the count of the list.
+* **ListExtension**: Get the value even if the index is more than the count of the list and shuffle the list.
 
 
 ## Author
