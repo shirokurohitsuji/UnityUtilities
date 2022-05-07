@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.6] - 2022-05-08
+### Added
+- Added RandomWeightedElementAt<T>(this IEnumerable<T> ie, Func<T, float> weightSelector) for IEnumerable<T>.
+
 ## [1.0.5] - 2022-04-10
 ### Added
 - Added Shuffle() for IList<T>.
@@ -31,7 +35,8 @@
 ### Added
 - Start distribution from Unity Package Manager.
 
-[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.5...HEAD
+[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.6...HEAD
+[1.0.6]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.2...v1.0.3

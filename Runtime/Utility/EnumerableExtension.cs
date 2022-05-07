@@ -30,5 +30,33 @@ namespace Utility
 
             return result;
         }
+
+        public static T RandomWeightedElementAt<T>(this IEnumerable<T> ie, Func<T, float> weightSelector)
+        {
+            var enumerable = ie as T[] ?? ie.ToArray();
+            var index = enumerable
+                .Select(weightSelector.Invoke)
+                .WeightedIndex(Rand.Next(enumerable.Length));
+            return index >= 0 ? enumerable.ElementAt(index) : default;
+        }
+
+        private static int WeightedIndex(this IEnumerable<float> source, float value)
+        {
+            var weights = source.ToArray();
+
+            var total = weights.Sum(x => x);
+            if (total <= 0f) return -1;
+
+            var i = 0;
+            var w = 0f;
+            foreach (var weight in weights)
+            {
+                w += weight / total;
+                if (value <= w) return i;
+                i++;
+            }
+
+            return -1;
+        }
     }
 }
