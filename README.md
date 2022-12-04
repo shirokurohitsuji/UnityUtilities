@@ -4,7 +4,7 @@ This is a package of utility files that are useful to include when starting a pr
 
 ## Requirement
 
-* Unity Editor 2021.3.2f1 
+* Unity Editor 2022.1.23f1 
 
 It should work with other versions, but we haven't tested it.
 

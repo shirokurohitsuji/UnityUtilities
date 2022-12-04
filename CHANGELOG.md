@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.7] - 2022-12-05
+### Changed
+- Fixed RandomWeightedElementAt<T>.
+
 ## [1.0.6] - 2022-05-08
 ### Added
 - Added RandomWeightedElementAt<T>(this IEnumerable<T> ie, Func<T, float> weightSelector) for IEnumerable<T>.
@@ -35,7 +39,8 @@
 ### Added
 - Start distribution from Unity Package Manager.
 
-[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.7...HEAD
+[1.0.7]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.3...v1.0.4

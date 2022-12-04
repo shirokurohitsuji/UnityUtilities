@@ -36,7 +36,7 @@ namespace Utility
             var enumerable = ie as T[] ?? ie.ToArray();
             var index = enumerable
                 .Select(weightSelector.Invoke)
-                .WeightedIndex(Rand.Next(enumerable.Length));
+                .WeightedIndex(UnityEngine.Random.Range(0f, 1f));
             return index >= 0 ? enumerable.ElementAt(index) : default;
         }
 
