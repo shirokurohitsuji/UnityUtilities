@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.8] - 2023-05-22
+### Changed
+- Fixed AddNameSpace to support Unity 2022.2.x and Windows.
+
 ## [1.0.7] - 2022-12-05
 ### Changed
 - Fixed RandomWeightedElementAt<T>.
@@ -39,7 +43,8 @@
 ### Added
 - Start distribution from Unity Package Manager.
 
-[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.7...HEAD
+[Unreleased]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.8...HEAD
+[1.0.8]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/shirokurohitsuji/UnityUtilities/compare/v1.0.4...v1.0.5
