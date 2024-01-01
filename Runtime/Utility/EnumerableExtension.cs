@@ -58,5 +58,12 @@ namespace Utility
 
             return -1;
         }
+
+        public static int MinOrMinusOne(this IEnumerable<int> sequence)
+        {
+            var array = sequence.ToArray();
+            if (array.Any()) return array.Min();
+            return -1;
+        }
     }
 }

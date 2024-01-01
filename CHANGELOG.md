@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [1.0.9] - 2024-01-01
+### Added
+- Added MinOrMinusOne(this IEnumerable<int> sequence) for  IEnumerable<int>.
+- Added optionalDependencies to project settings.
+
 ## [1.0.8] - 2023-05-22
 ### Changed
 - Fixed AddNameSpace to support Unity 2022.2.x and Windows.
