@@ -12,6 +12,12 @@ on:
       STEAM_APP_ID_DEMO:
         required: false
         type: string
+      UNITY_CUSTOM_IMAGE_WINDOWS:
+        required: false
+        type: string
+      UNITY_CUSTOM_IMAGE_MAC:
+        required: false
+        type: string
 
 env:
   PROJECT_PATH: .
@@ -26,15 +32,13 @@ env:
   STEAM_USERNAME: ${{ vars.STEAM_USERNAME }}
   STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
   STEAM_CONFIG_VDF: ${{ secrets.STEAM_CONFIG_VDF }}
-  STEAM_SSFN_FILE_NAME: ${{ vars.STEAM_SSFN_FILE_NAME }}
-  STEAM_SSFN_FILE_CONTENTS: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
   STEAM_APP_ID: ${{ inputs.STEAM_APP_ID }}
   STEAM_APP_ID_DEMO: ${{ inputs.STEAM_APP_ID_DEMO }}
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ secrets.UNITY_CUSTOM_IMAGE_WINDOWS }}
-  UNITY_CUSTOM_IMAGE_MAC: ${{ secrets.UNITY_CUSTOM_IMAGE_MAC }}
+  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ inputs.UNITY_CUSTOM_IMAGE_WINDOWS }}
+  UNITY_CUSTOM_IMAGE_MAC: ${{ inputs.UNITY_CUSTOM_IMAGE_MAC }}
 
 jobs:
   build-windows:
