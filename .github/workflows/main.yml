@@ -42,7 +42,7 @@ jobs:
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities
@@ -72,7 +72,7 @@ jobs:
         targetPlatform:
           - StandaloneWindows64
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities

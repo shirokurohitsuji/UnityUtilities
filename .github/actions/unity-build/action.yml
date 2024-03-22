@@ -3,6 +3,11 @@ description: 'https://game.ci/docs/github/getting-started'
 runs:
   using: "composite"
   steps:
+    - name: checkout-project
+      uses: actions/checkout@v4
+      with:
+        repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
+        fetch-depth: 0
     - name: build
       uses: game-ci/unity-builder@v4
       with:

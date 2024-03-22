@@ -3,6 +3,11 @@ description: 'https://developer.apple.com/documentation/security/notarizing_maco
 runs:
   using: "composite"
   steps:
+    - name: checkout-project
+      uses: actions/checkout@v4
+      with:
+        repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
+        fetch-depth: 0
     - name: load-app
       uses: actions/download-artifact@v3
       with:

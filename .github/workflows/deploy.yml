@@ -52,12 +52,12 @@ jobs:
     outputs:
       buildVersion: ${{ steps.build.outputs.buildVersion }}
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
-      - name: prune previous images
+      - name: prune-previous-images
         run: docker image prune --all --force
         shell: bash
       - name: cache
@@ -65,7 +65,7 @@ jobs:
         env:
           target_platform: ${{ matrix.targetPlatform }}
       - name: build
-        uses: /home/runner/work/UnityUtilities/UnityUtilities/.github/actions/unity-build
+        uses: ./.github/actions/unity-build
         env:
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
@@ -79,12 +79,12 @@ jobs:
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone.
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
-      - name: prune previous images
+      - name: prune-previous-images
         run: docker image prune --all --force
         shell: bash
       - name: cache
@@ -108,7 +108,7 @@ jobs:
         targetPlatform:
           - StandaloneOSX
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities
@@ -126,7 +126,7 @@ jobs:
       - build-windows
       - post-build-mac
     steps:
-      - name: checkout-repository
+      - name: checkout-self
         uses: actions/checkout@v4
         with:
           repository: shirokurohitsuji/UnityUtilities
@@ -135,6 +135,11 @@ jobs:
         uses: ./.github/actions/deploy-to-steam
         env:
           build_version: ${{ needs.build-windows.outputs.buildVersion }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
       - name: release-on-github
         uses: ./.github/actions/create-release
         env:

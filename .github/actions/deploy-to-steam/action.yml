@@ -3,6 +3,11 @@ description: 'https://game.ci/docs/github/deployment/steam'
 runs:
   using: "composite"
   steps:
+    - name: checkout-project
+      uses: actions/checkout@v4
+      with:
+        repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
+        fetch-depth: 0
     - name: download-win-artifact
       uses: actions/download-artifact@v3
       with:
