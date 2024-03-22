@@ -6,6 +6,12 @@ on:
       PROJECT_NAME:
         required: true
         type: string
+      UNITY_CUSTOM_IMAGE_WINDOWS:
+        required: false
+        type: string
+      UNITY_CUSTOM_IMAGE_MAC:
+        required: false
+        type: string
 
 env:
   PROJECT_PATH: .
@@ -21,8 +27,8 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
   UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ secrets.UNITY_CUSTOM_IMAGE_WINDOWS }}
-  UNITY_CUSTOM_IMAGE_MAC: ${{ secrets.UNITY_CUSTOM_IMAGE_MAC }}
+  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ inputs.UNITY_CUSTOM_IMAGE_WINDOWS }}
+  UNITY_CUSTOM_IMAGE_MAC: ${{ inputs.UNITY_CUSTOM_IMAGE_MAC }}
 
 jobs:
   build-windows:
@@ -40,15 +46,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: prune previous images
+      - name: prune-previous-images
         run: docker image prune --all --force
         shell: bash
       - name: cache
-        uses: ./.github/actions/cache-files
+        uses: ${{ github.workspace }}/.github/actions/cache-files
         env:
           target_platform: ${{ matrix.targetPlatform }}
       - name: build
-        uses: ./.github/actions/unity-build
+        uses: ${{ github.workspace }}/.github/actions/unity-build
         env:
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
@@ -70,6 +76,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: release-on-github
-        uses: ./.github/actions/create-release
+        uses: ${{ github.workspace }}/.github/actions/create-release
         env:
           deploy_platform: ${{ matrix.targetPlatform }}
