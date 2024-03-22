@@ -1,0 +1,51 @@
+name: notarize-mac-app
+description: 'https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow'
+runs:
+  using: "composite"
+  steps:
+    - name: load-app
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
+        path: build/${{ env.target_platform }}
+    - name: codesign-app
+      env:
+        certificate_path: certificate.p12
+        keychain_tmp_password: keychain-password
+        key_chain: build.keychain
+        app_path: ${{ env.build_path }}.app
+        entitlements_path: ${{ env.build_path }}.entitlements
+      run: |
+        echo ${{ env.APPLE_CERTIFICATES_P12 }} | base64 --decode > ${{ env.certificate_path }}
+        security create-keychain -p ${{ env.keychain_tmp_password }} ${{ env.key_chain }}
+        security default-keychain -s ${{ env.key_chain }}
+        security unlock-keychain -p ${{ env.keychain_tmp_password }} ${{ env.key_chain }}
+        security set-keychain-settings -t 4200 -u ${{ env.key_chain }}
+        security import ${{ env.certificate_path }} -k ${{ env.key_chain }} -P "${{ env.APPLE_CERTIFICATES_PASSWORD }}" -T /usr/bin/codesign
+        security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k ${{ env.keychain_tmp_password }} ${{ env.key_chain }}
+        echo "${{ env.APPLE_ENTITLEMENT }}" > ${{ env.entitlements_path }}
+        plutil -convert xml1 ${{ env.entitlements_path }}
+        codesign --deep --force --verbose --timestamp --options runtime --entitlements ${{ env.entitlements_path }} --sign "${{ env.APPLE_CONNECT_IDENTITY }}" ${{ env.app_path }}
+        rm -fr *.p12
+        rm -fr *.entitlements
+      shell: bash
+    - name: notarize
+      env:
+        app_path: ${{ env.build_path }}.app
+        zip_path: ${{ env.build_path }}.zip
+      run: |
+        zip -r ${{ env.zip_path }} ${{ env.app_path }}
+        xcrun notarytool submit ${{ env.zip_path }} \
+                --apple-id ${{ env.APPLE_CONNECT_ID }} \
+                --password ${{ env.APPLE_CONNECT_PASSWORD }} \
+                --team-id ${{ env.APPLE_CONNECT_TEAM }} \
+                --wait
+        rm ${{ env.zip_path }}
+        xcrun stapler staple ${{ env.app_path }}
+      shell: bash
+    - name: upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
+        path: build/${{ env.target_platform }}
+        retention-days: 1

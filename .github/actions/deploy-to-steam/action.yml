@@ -1,0 +1,39 @@
+name: deploy-to-steam
+description: 'https://game.ci/docs/github/deployment/steam'
+runs:
+  using: "composite"
+  steps:
+    - name: download-win-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: StandaloneWindows64-${{ env.PROJECT_NAME }}
+        path: build/StandaloneWindows64
+    - name: download-mac-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: StandaloneOSX-${{ env.PROJECT_NAME }}
+        path: build/StandaloneOSX
+    - name: deploy-master-alpha
+      uses: game-ci/steam-deploy@v3
+      if: ${{ github.ref == 'refs/heads/master' }}
+      with:
+        username: ${{ env.STEAM_USERNAME }}
+        configVdf: ${{ env.STEAM_CONFIG_VDF }}
+        appId: ${{ env.STEAM_APP_ID }}
+        buildDescription: ${{ env.build_version }}
+        rootPath: build
+        depot1Path: StandaloneOSX
+        depot3Path: StandaloneWindows64
+        releaseBranch: alpha
+    - name: deploy-demo-beta
+      uses: game-ci/steam-deploy@v3
+      if: ${{ github.ref == 'refs/heads/demo' }}
+      with:
+        username: ${{ env.STEAM_USERNAME }}
+        configVdf: ${{ env.STEAM_CONFIG_VDF }}
+        appId: ${{ env.STEAM_APP_ID_DEMO }}
+        buildDescription: ${{ env.build_version }}
+        rootPath: build
+        depot1Path: StandaloneOSX
+        depot3Path: StandaloneWindows64
+        releaseBranch: auto

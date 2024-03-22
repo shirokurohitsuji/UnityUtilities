@@ -1,0 +1,18 @@
+name: unity-build
+description: 'https://game.ci/docs/github/getting-started'
+runs:
+  using: "composite"
+  steps:
+    - name: build
+      uses: game-ci/unity-builder@v4
+      with:
+        projectPath: ${{ env.PROJECT_PATH }}
+        targetPlatform: ${{ env.target_platform }}
+        buildName: ${{ env.PROJECT_NAME }}
+        customImage: ${{ env.unity_custom_image }}
+    - name: upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
+        path: build/${{ env.target_platform }}
+        retention-days: 1

@@ -1,0 +1,75 @@
+name: standalone-build
+
+on:
+  workflow_call:
+    inputs:
+      PROJECT_NAME:
+        required: true
+        type: string
+
+env:
+  PROJECT_PATH: .
+  PROJECT_NAME: ${{ inputs.PROJECT_NAME }}
+  APPLE_CERTIFICATES_P12: ${{ secrets.APPLE_CERTIFICATES_P12 }}
+  APPLE_CERTIFICATES_PASSWORD: ${{ secrets.APPLE_CERTIFICATES_PASSWORD }}
+  APPLE_ENTITLEMENT: ${{ vars.APPLE_ENTITLEMENT }}
+  APPLE_CONNECT_ID: ${{ vars.APPLE_CONNECT_ID }}
+  APPLE_CONNECT_PASSWORD: ${{ secrets.APPLE_CONNECT_PASSWORD }}
+  APPLE_CONNECT_TEAM: ${{ vars.APPLE_CONNECT_TEAM }}
+  APPLE_CONNECT_IDENTITY: ${{ vars.APPLE_CONNECT_IDENTITY }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ secrets.UNITY_CUSTOM_IMAGE_WINDOWS }}
+  UNITY_CUSTOM_IMAGE_MAC: ${{ secrets.UNITY_CUSTOM_IMAGE_MAC }}
+
+jobs:
+  build-windows:
+    name: build-for-${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+    outputs:
+      buildVersion: ${{ steps.build.outputs.buildVersion }}
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: prune previous images
+        run: docker image prune --all --force
+        shell: bash
+      - name: cache
+        uses: ./.github/actions/cache-files
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+      - name: build
+        uses: ./.github/actions/unity-build
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+          unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+
+  prerelease:
+    name: prerelease
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/demo'
+    needs:
+      - build-windows
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: release-on-github
+        uses: ./.github/actions/create-release
+        env:
+          deploy_platform: ${{ matrix.targetPlatform }}

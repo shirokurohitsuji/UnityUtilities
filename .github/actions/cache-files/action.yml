@@ -1,0 +1,13 @@
+name: restore-assets
+description: 'https://game.ci/docs/github/getting-started#simple-example'
+runs:
+  using: "composite"
+  steps:
+    - name: cache
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.PROJECT_PATH }}/Library
+        key: Library-${{ env.target_platform }}-${{ hashFiles(env.PROJECT_PATH) }}
+        restore-keys: |
+          Library-${{ env.target_platform }}-
+          Library-

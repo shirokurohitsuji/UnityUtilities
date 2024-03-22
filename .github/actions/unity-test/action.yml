@@ -1,0 +1,20 @@
+name: unity-test
+description: 'https://game.ci/docs/github/test-runner'
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+    - uses: game-ci/unity-test-runner@v4
+      id: tests
+      with:
+        projectPath: ${{ env.PROJECT_PATH }}
+        testMode: ${{ env.test_mode }}
+        artifactsPath: ${{ env.test_mode }}-artifacts
+        githubToken: ${{ env.GITHUB_TOKEN }}
+        checkName: ${{ env.test_mode }} Test Results
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: Test results for ${{ env.test_mode }}
+        path: ${{ steps.tests.outputs.artifactsPath }}
+        retention-days: 1

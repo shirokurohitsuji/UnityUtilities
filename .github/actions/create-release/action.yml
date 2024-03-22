@@ -1,0 +1,84 @@
+name: create-release
+description: 'https://github.com/softprops/action-gh-release'
+runs:
+  using: "composite"
+  steps:
+    - name: download-mac-artifact
+      uses: actions/download-artifact@v3
+      env:
+        target_platform: StandaloneOSX
+      if: ${{ env.deploy_platform == env.target_platform || env.deploy_platform == 'both' }}
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
+        path: build/${{ env.target_platform }}
+    - name: prepare-for-release-mac
+      env:
+        target_platform: StandaloneOSX
+        mac_path: ${{ env.PROJECT_NAME }}.app
+        zip_path: StandaloneOSX-${{ env.PROJECT_NAME }}.zip
+        build_dir: ${{ env.PROJECT_PATH }}/build/StandaloneOSX/
+      if: ${{ env.deploy_platform == env.target_platform || env.deploy_platform == 'both' }}
+      id: prepare-release-mac
+      run: |
+        echo "name=branch::${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        echo "tag=${GITHUB_REF#refs/heads/}_$(date +"%Y.%m.%d_%H-%M")" >> $GITHUB_OUTPUT
+        cd ${{ env.build_dir }}
+        chmod -R +x ${{ env.mac_path }}
+        zip -r ${{ env.zip_path }} ${{ env.mac_path }}
+        mv ${{ env.zip_path }} ../
+      shell: bash
+    - name: download-win-artifact
+      uses: actions/download-artifact@v3
+      env:
+        target_platform: StandaloneWindows64
+      if: ${{ env.deploy_platform == env.target_platform || env.deploy_platform == 'both' }}
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
+        path: build/${{ env.target_platform }}
+    - name: prepare-for-release-win
+      env:
+        win_path: StandaloneWindows64
+        zip_path: StandaloneWindows64-${{ env.PROJECT_NAME }}.zip
+        build_dir: ${{ env.PROJECT_PATH }}/build/
+      if: ${{ env.deploy_platform == 'StandaloneWindows64' || env.deploy_platform == 'both' }}
+      id: prepare-release-windows
+      run: |
+        echo "name=branch::${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+        echo "tag=${GITHUB_REF#refs/heads/}_$(date +"%Y.%m.%d_%H-%M")" >> $GITHUB_OUTPUT
+        cd ${{ env.build_dir }}
+        chmod -R +x ${{ env.win_path }}
+        zip -r ${{ env.zip_path }} ${{ env.win_path }}
+      shell: bash
+    - name: release-mac
+      uses: softprops/action-gh-release@v1
+      env:
+        zip_path_mac: ${{ env.PROJECT_PATH }}/build/StandaloneOSX-${{ env.PROJECT_NAME }}.zip
+      if: ${{ env.deploy_platform == 'StandaloneOSX' }}
+      with:
+        name: ${{ steps.prepare-release-mac.outputs.branch || steps.prepare-release-windows.outputs.branch }}
+        tag_name: ${{ steps.prepare-release-mac.outputs.tag || steps.prepare-release-windows.outputs.tag }}
+        files: ${{ env.zip_path_mac }}
+        prerelease: true
+    - name: release-win
+      uses: softprops/action-gh-release@v1
+      env:
+        zip_path_win: ${{ env.PROJECT_PATH }}/build/StandaloneWindows64-${{ env.PROJECT_NAME }}.zip
+      if: ${{ env.deploy_platform == 'StandaloneWindows64' }}
+      with:
+        name: ${{ steps.prepare-release-mac.outputs.branch || steps.prepare-release-windows.outputs.branch }}
+        tag_name: ${{ steps.prepare-release-mac.outputs.tag || steps.prepare-release-windows.outputs.tag }}
+        files: ${{ env.zip_path_win }}
+        prerelease: true
+    - name: release-both
+      if: ${{ env.deploy_platform == 'both' }}
+      uses: softprops/action-gh-release@v1
+      env:
+        zip_path_mac: ${{ env.PROJECT_PATH }}/build/StandaloneOSX-${{ env.PROJECT_NAME }}.zip
+        zip_path_win: ${{ env.PROJECT_PATH }}/build/StandaloneWindows64-${{ env.PROJECT_NAME }}.zip
+      with:
+        name: ${{ steps.prepare-release-mac.outputs.branch || steps.prepare-release-windows.outputs.branch }}
+        tag_name: ${{ steps.prepare-release-mac.outputs.tag || steps.prepare-release-windows.outputs.tag }}
+        files: |
+          ${{ env.zip_path_mac }}
+          ${{ env.zip_path_win }}
+        prerelease: true

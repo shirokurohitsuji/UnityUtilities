@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [1.0.10] - 2024-03-18
+### Added
+- Added GitHub Actions Workflow files to be shared in several projects.
+
 ## [1.0.9] - 2024-01-01
 ### Added
 - Added MinOrMinusOne(this IEnumerable<int> sequence) for  IEnumerable<int>.

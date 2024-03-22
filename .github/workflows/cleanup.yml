@@ -1,0 +1,43 @@
+name: artifacts-cleanup
+
+on:
+  workflow_call:
+    secrets:
+      CLIENT_SECRET:
+        required: true
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: delete-artifacts
+        uses: kolpav/purge-artifacts-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          expire-in: 60s
+      - name: purge-tags
+        run: |
+          git config user.name "github-actions-bot"
+          git config user.email "<>"
+          tags=$(git ls-remote --tags origin | cut -f2)
+          prefix=refs/tags/
+          for ref in $tags
+          do
+            tag=$(echo $ref | sed -r "s/^refs\/tags\/([^_]*)_.+$/\1/")
+            suffix=$(echo $ref | sed -r "s/^refs\/tags\/([^_]*)(_[^\w]*)$/\2/")
+            count=$(git ls-remote --heads origin $tag | wc -l)
+            if [ $count -eq 0 ]; then
+              git push -d origin $tag$suffix
+            fi
+          done
+        shell: bash
+      - name: delete-drafts
+        uses: hugo19941994/delete-draft-releases@v1.0.1
+        with:
+          threshold: 12h
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

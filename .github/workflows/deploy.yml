@@ -1,0 +1,133 @@
+name: standalone-deploy
+
+on:
+  workflow_call:
+    inputs:
+      PROJECT_NAME:
+        required: true
+        type: string
+      STEAM_APP_ID:
+        required: true
+        type: string
+      STEAM_APP_ID_DEMO:
+        required: false
+        type: string
+
+env:
+  PROJECT_PATH: .
+  APPLE_CERTIFICATES_P12: ${{ secrets.APPLE_CERTIFICATES_P12 }}
+  APPLE_CERTIFICATES_PASSWORD: ${{ secrets.APPLE_CERTIFICATES_PASSWORD }}
+  APPLE_ENTITLEMENT: ${{ vars.APPLE_ENTITLEMENT }}
+  APPLE_CONNECT_ID: ${{ vars.APPLE_CONNECT_ID }}
+  APPLE_CONNECT_PASSWORD: ${{ secrets.APPLE_CONNECT_PASSWORD }}
+  APPLE_CONNECT_TEAM: ${{ vars.APPLE_CONNECT_TEAM }}
+  APPLE_CONNECT_IDENTITY: ${{ vars.APPLE_CONNECT_IDENTITY }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  STEAM_USERNAME: ${{ vars.STEAM_USERNAME }}
+  STEAM_PASSWORD: ${{ secrets.STEAM_PASSWORD }}
+  STEAM_CONFIG_VDF: ${{ secrets.STEAM_CONFIG_VDF }}
+  STEAM_SSFN_FILE_NAME: ${{ vars.STEAM_SSFN_FILE_NAME }}
+  STEAM_SSFN_FILE_CONTENTS: ${{ secrets.STEAM_SSFN_FILE_CONTENTS }}
+  STEAM_APP_ID: ${{ inputs.STEAM_APP_ID }}
+  STEAM_APP_ID_DEMO: ${{ inputs.STEAM_APP_ID_DEMO }}
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ secrets.UNITY_CUSTOM_IMAGE_WINDOWS }}
+  UNITY_CUSTOM_IMAGE_MAC: ${{ secrets.UNITY_CUSTOM_IMAGE_MAC }}
+
+jobs:
+  build-windows:
+    name: build-for-${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64 # Build a Windows 64-bit standalone.
+    outputs:
+      buildVersion: ${{ steps.build.outputs.buildVersion }}
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: prune previous images
+        run: docker image prune --all --force
+        shell: bash
+      - name: cache
+        uses: ./.github/actions/cache-files
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+      - name: build
+        uses: ./.github/actions/unity-build
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+          unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+
+  build-mac:
+    name: build-for-${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneOSX # Build a macOS standalone.
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: prune previous images
+        run: docker image prune --all --force
+        shell: bash
+      - name: cache
+        uses: ./.github/actions/cache-files
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+      - name: build
+        uses: ./.github/actions/unity-build
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+          unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_MAC }}
+
+  post-build-mac:
+    name: notarize-for-${{ matrix.targetPlatform }}
+    runs-on: macos-latest
+    needs:
+      - build-mac
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneOSX
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: notarize
+        uses: ./.github/actions/notarize-mac-app
+        env:
+          target_platform: ${{ matrix.targetPlatform }}
+          build_path: ${{ env.PROJECT_PATH }}/build/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs:
+      - build-windows
+      - post-build-mac
+    steps:
+      - name: checkout-repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: steam
+        uses: ./.github/actions/deploy-to-steam
+        env:
+          build_version: ${{ needs.build-windows.outputs.buildVersion }}
+      - name: release-on-github
+        uses: ./.github/actions/create-release
+        env:
+          deploy_platform: both
