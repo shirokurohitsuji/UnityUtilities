@@ -55,12 +55,13 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
         with:
+          repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
       - name: prune previous images
         run: docker image prune --all --force
         shell: bash
       - name: cache
-        uses: ${{ github.workspace }}/.github/actions/cache-files
+        uses: ./.github/actions/cache-files
         env:
           target_platform: ${{ matrix.targetPlatform }}
       - name: build
@@ -81,16 +82,17 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
         with:
+          repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
       - name: prune previous images
         run: docker image prune --all --force
         shell: bash
       - name: cache
-        uses: ${{ github.workspace }}/.github/actions/cache-files
+        uses: ./.github/actions/cache-files
         env:
           target_platform: ${{ matrix.targetPlatform }}
       - name: build
-        uses: ${{ github.workspace }}/.github/actions/unity-build
+        uses: ./.github/actions/unity-build
         env:
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_MAC }}
@@ -109,9 +111,10 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
         with:
+          repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
       - name: notarize
-        uses: ${{ github.workspace }}/.github/actions/notarize-mac-app
+        uses: ./.github/actions/notarize-mac-app
         env:
           target_platform: ${{ matrix.targetPlatform }}
           build_path: ${{ env.PROJECT_PATH }}/build/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}
@@ -126,12 +129,13 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
         with:
+          repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
       - name: steam
-        uses: ${{ github.workspace }}/.github/actions/deploy-to-steam
+        uses: ./.github/actions/deploy-to-steam
         env:
           build_version: ${{ needs.build-windows.outputs.buildVersion }}
       - name: release-on-github
-        uses: ${{ github.workspace }}/.github/actions/create-release
+        uses: ./.github/actions/create-release
         env:
           deploy_platform: both

@@ -12,6 +12,7 @@ runs:
         artifactsPath: ${{ env.test_mode }}-artifacts
         githubToken: ${{ env.GITHUB_TOKEN }}
         checkName: ${{ env.test_mode }} Test Results
+        repository: shirokurohitsuji/UnityUtilities
     - uses: actions/upload-artifact@v3
       if: always()
       with:

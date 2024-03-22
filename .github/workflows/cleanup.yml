@@ -13,6 +13,7 @@ jobs:
       - name: checkout-repository
         uses: actions/checkout@v4
         with:
+          repository: shirokurohitsuji/UnityUtilities
           fetch-depth: 0
       - name: delete-artifacts
         uses: kolpav/purge-artifacts-action@v1
