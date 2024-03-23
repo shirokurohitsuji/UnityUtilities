@@ -134,6 +134,8 @@ jobs:
 
   deploy:
     name: deploy
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     needs:
       - build-windows
@@ -157,3 +159,8 @@ jobs:
         uses: ./.github/actions/create-release
         env:
           deploy_platform: both
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0

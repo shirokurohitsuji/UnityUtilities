@@ -63,6 +63,8 @@ jobs:
 
   prerelease:
     name: prerelease
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/master' && github.ref != 'refs/heads/demo'
     needs:
@@ -82,3 +84,8 @@ jobs:
         uses: ./.github/actions/create-release
         env:
           deploy_platform: ${{ matrix.targetPlatform }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
