@@ -58,6 +58,11 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
 
   build-mac:
     name: build-for-${{ matrix.targetPlatform }}
@@ -88,6 +93,11 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_MAC }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
 
   post-build-mac:
     name: notarize-for-${{ matrix.targetPlatform }}
@@ -100,16 +110,16 @@ jobs:
         targetPlatform:
           - StandaloneOSX
     steps:
-      - name: checkout-self
-        uses: actions/checkout@v4
-        with:
-          repository: shirokurohitsuji/UnityUtilities
-          fetch-depth: 0
       - name: notarize
         uses: ./.github/actions/notarize-mac-app
         env:
           target_platform: ${{ matrix.targetPlatform }}
           build_path: ${{ env.PROJECT_PATH }}/build/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
 
   deploy:
     name: deploy
@@ -118,11 +128,6 @@ jobs:
       - build-windows
       - post-build-mac
     steps:
-      - name: checkout-self
-        uses: actions/checkout@v4
-        with:
-          repository: shirokurohitsuji/UnityUtilities
-          fetch-depth: 0
       - name: steam
         uses: ./.github/actions/deploy-to-steam
         env:

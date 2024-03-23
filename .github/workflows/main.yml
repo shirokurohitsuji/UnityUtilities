@@ -52,6 +52,11 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
 
   prerelease:
     name: prerelease
@@ -65,11 +70,6 @@ jobs:
         targetPlatform:
           - StandaloneWindows64
     steps:
-      - name: checkout-self
-        uses: actions/checkout@v4
-        with:
-          repository: shirokurohitsuji/UnityUtilities
-          fetch-depth: 0
       - name: release-on-github
         uses: ./.github/actions/create-release
         env:
