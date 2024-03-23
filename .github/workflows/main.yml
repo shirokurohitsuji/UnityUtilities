@@ -24,9 +24,6 @@ env:
   APPLE_CONNECT_TEAM: ${{ vars.APPLE_CONNECT_TEAM }}
   APPLE_CONNECT_IDENTITY: ${{ vars.APPLE_CONNECT_IDENTITY }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
-  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
   UNITY_CUSTOM_IMAGE_WINDOWS: ${{ inputs.UNITY_CUSTOM_IMAGE_WINDOWS }}
   UNITY_CUSTOM_IMAGE_MAC: ${{ inputs.UNITY_CUSTOM_IMAGE_MAC }}
 
@@ -57,6 +54,9 @@ jobs:
       - name: build
         uses: ./.github/actions/unity-build
         env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
 

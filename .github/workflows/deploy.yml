@@ -34,9 +34,6 @@ env:
   STEAM_CONFIG_VDF: ${{ secrets.STEAM_CONFIG_VDF }}
   STEAM_APP_ID: ${{ inputs.STEAM_APP_ID }}
   STEAM_APP_ID_DEMO: ${{ inputs.STEAM_APP_ID_DEMO }}
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-  UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
-  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
   UNITY_CUSTOM_IMAGE_WINDOWS: ${{ inputs.UNITY_CUSTOM_IMAGE_WINDOWS }}
   UNITY_CUSTOM_IMAGE_MAC: ${{ inputs.UNITY_CUSTOM_IMAGE_MAC }}
 
@@ -67,6 +64,9 @@ jobs:
       - name: build
         uses: ./.github/actions/unity-build
         env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
 
@@ -94,6 +94,9 @@ jobs:
       - name: build
         uses: ./.github/actions/unity-build
         env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_MAC }}
 
