@@ -73,6 +73,11 @@ jobs:
         targetPlatform:
           - StandaloneWindows64
     steps:
+      - name: checkout-self
+        uses: actions/checkout@v4
+        with:
+          repository: shirokurohitsuji/UnityUtilities
+          fetch-depth: 0
       - name: release-on-github
         uses: ./.github/actions/create-release
         env:
