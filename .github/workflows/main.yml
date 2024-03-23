@@ -52,6 +52,9 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
           unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+      - name: chown
+        shell: bash
+        run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
       - name: checkout-self
         uses: actions/checkout@v4
         with:
