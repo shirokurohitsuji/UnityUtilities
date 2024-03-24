@@ -6,19 +6,10 @@ on:
       PROJECT_NAME:
         required: true
         type: string
-      UNITY_CUSTOM_IMAGE_WINDOWS:
-        required: false
-        type: string
-      UNITY_CUSTOM_IMAGE_MAC:
-        required: false
-        type: string
 
 env:
   PROJECT_PATH: .
   PROJECT_NAME: ${{ inputs.PROJECT_NAME }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  UNITY_CUSTOM_IMAGE_WINDOWS: ${{ inputs.UNITY_CUSTOM_IMAGE_WINDOWS }}
-  UNITY_CUSTOM_IMAGE_MAC: ${{ inputs.UNITY_CUSTOM_IMAGE_MAC }}
 
 jobs:
   build-windows:
@@ -51,7 +42,7 @@ jobs:
           UNITY_EMAIL: ${{ vars.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           target_platform: ${{ matrix.targetPlatform }}
-          unity_custom_image: ${{ env.UNITY_CUSTOM_IMAGE_WINDOWS }}
+          unity_custom_image: ${{ vars.UNITY_CUSTOM_IMAGE_WINDOWS }}
       - name: chown
         shell: bash
         run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
