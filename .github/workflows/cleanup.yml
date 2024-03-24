@@ -1,10 +1,7 @@
 name: artifacts-cleanup
 
 on:
-  workflow_call:
-    secrets:
-      CLIENT_SECRET:
-        required: true
+  workflow_call: {}
 
 jobs:
   clean:
