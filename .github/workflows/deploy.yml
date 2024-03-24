@@ -118,9 +118,6 @@ jobs:
           APPLE_CONNECT_TEAM: ${{ vars.APPLE_CONNECT_TEAM }}
           target_platform: ${{ matrix.targetPlatform }}
           build_path: ${{ env.PROJECT_PATH }}/build/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}
-      - name: chown
-        shell: bash
-        run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
       - name: checkout-self
         uses: actions/checkout@v4
         with:
