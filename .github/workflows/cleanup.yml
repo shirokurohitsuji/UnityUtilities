@@ -1,16 +1,23 @@
 name: artifacts-cleanup
 
 on:
-  workflow_call: {}
+  workflow_call:
+    inputs:
+      PROJECT_NAME:
+        required: true
+        type: string
+
+env:
+  PROJECT_NAME: ${{ inputs.PROJECT_NAME }}
 
 jobs:
   clean:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout-repository
+      - name: checkout-project
         uses: actions/checkout@v4
         with:
-          repository: shirokurohitsuji/UnityUtilities
+          repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
           fetch-depth: 0
       - name: delete-artifacts
         uses: kolpav/purge-artifacts-action@v1
