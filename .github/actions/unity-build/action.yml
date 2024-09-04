@@ -15,6 +15,7 @@ runs:
         targetPlatform: ${{ env.target_platform }}
         buildName: ${{ env.PROJECT_NAME }}
         customImage: ${{ env.unity_custom_image }}
+        versioning: 'None'
     - name: upload
       uses: actions/upload-artifact@v3
       with:
