@@ -143,6 +143,7 @@ jobs:
           STEAM_CONFIG_VDF: ${{ secrets.STEAM_CONFIG_VDF }}
           STEAM_APP_ID: ${{ vars.STEAM_APP_ID }}
           STEAM_APP_ID_DEMO: ${{ vars.STEAM_APP_ID_DEMO }}
+          DEMO_IN_PARENT: ${{ vars.DEMO_IN_PARENT }}
           build_version: ${{ needs.build-windows.outputs.buildVersion }}
       - name: chown
         shell: bash

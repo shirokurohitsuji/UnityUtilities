@@ -30,9 +30,21 @@ runs:
         depot1Path: StandaloneOSX
         depot3Path: StandaloneWindows64
         releaseBranch: alpha
+    - name: deploy-demo-gamma
+      uses: game-ci/steam-deploy@v3
+      if: ${{ github.ref == 'refs/heads/demo' && env.DEMO_IN_PARENT }}
+      with:
+        username: ${{ env.STEAM_USERNAME }}
+        configVdf: ${{ env.STEAM_CONFIG_VDF }}
+        appId: ${{ env.STEAM_APP_ID }}
+        buildDescription: ${{ env.build_version }}
+        rootPath: build
+        depot1Path: StandaloneOSX
+        depot3Path: StandaloneWindows64
+        releaseBranch: demo
     - name: deploy-demo-beta
       uses: game-ci/steam-deploy@v3
-      if: ${{ github.ref == 'refs/heads/demo' }}
+      if: ${{ github.ref == 'refs/heads/demo' && !env.DEMO_IN_PARENT }}
       with:
         username: ${{ env.STEAM_USERNAME }}
         configVdf: ${{ env.STEAM_CONFIG_VDF }}
