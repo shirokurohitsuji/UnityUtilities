@@ -48,6 +48,10 @@ runs:
         rm ${{ env.zip_path }}
         xcrun stapler staple ${{ env.app_path }}
       shell: bash
+    - name: delete-artifact
+      uses: geekyeggo/delete-artifact@v5
+      with:
+        name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
     - name: upload
       uses: actions/upload-artifact@v4
       with:
