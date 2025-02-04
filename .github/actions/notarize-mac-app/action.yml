@@ -9,7 +9,7 @@ runs:
         repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
         fetch-depth: 0
     - name: load-app
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
         path: build/${{ env.target_platform }}
@@ -49,7 +49,7 @@ runs:
         xcrun stapler staple ${{ env.app_path }}
       shell: bash
     - name: upload
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.target_platform }}-${{ env.PROJECT_NAME }}
         path: build/${{ env.target_platform }}

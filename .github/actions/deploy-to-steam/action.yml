@@ -9,12 +9,12 @@ runs:
         repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
         fetch-depth: 0
     - name: download-win-artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: StandaloneWindows64-${{ env.PROJECT_NAME }}
         path: build/StandaloneWindows64
     - name: download-mac-artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: StandaloneOSX-${{ env.PROJECT_NAME }}
         path: build/StandaloneOSX

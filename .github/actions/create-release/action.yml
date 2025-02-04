@@ -9,7 +9,7 @@ runs:
         repository: shirokurohitsuji/${{ env.PROJECT_NAME }}
         fetch-depth: 0
     - name: download-mac-artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       env:
         target_platform: StandaloneOSX
       if: ${{ env.deploy_platform == env.target_platform || env.deploy_platform == 'both' }}
@@ -33,7 +33,7 @@ runs:
         mv ${{ env.zip_path }} ../
       shell: bash
     - name: download-win-artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       env:
         target_platform: StandaloneWindows64
       if: ${{ env.deploy_platform == env.target_platform || env.deploy_platform == 'both' }}
